@@ -1,0 +1,60 @@
+version: "3.7"
+
+networks:
+  saga-network:
+    driver: bridge
+
+name: ${APP_NAME}
+services:
+  app:
+    build:
+      args:
+        user: apache
+        uid: 48
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ${APP_NAME}-laravel
+    container_name: ${APP_NAME}-laravel
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./backend:/var/www
+    networks:
+      - ${APP_NETWORK}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: ${APP_NAME}-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./backend:/var/www
+      - ./backend/nginx:/etc/nginx/conf.d
+    networks:
+      - ${APP_NETWORK}
+  redis:
+    container_name: ${APP_NAME}-redis
+    image: redis:alpine
+    volumes:
+      - ./backend/redis:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - ${APP_NETWORK}
+    command: redis-server --appendonly yes --replica-read-only no
+  php-queue:
+    restart: always
+    image: ${APP_NAME}-laravel
+    working_dir: /var/www/
+    command: php artisan queue:work
+    stop_signal: SIGTERM
+    volumes:
+      - ./backend:/var/www
+    networks:
+    - ${APP_NETWORK}
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
+
+    

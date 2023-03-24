@@ -1,0 +1,1 @@
+concurrently "docker-compose up" "cd ./frontend/ && npm run dev"
