@@ -7,7 +7,7 @@ let AuthService = {
     async login(payload){
         await ApiClient.post('/auth/login', payload)
         .then((response)=>{
-            let data = response.data.data;
+            let data = response.data;
             LocalDB.data = {};
             LocalDB.data.token = data.token;
             LocalDB.data.user = data.user;

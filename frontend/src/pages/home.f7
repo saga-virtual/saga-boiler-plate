@@ -1,7 +1,7 @@
 <template>
   <div class="page" data-name="home">
     <!-- Top Navbar -->
-    <div class="navbar navbar-large">
+    <div class="navbar">
       <div class="navbar-bg"></div>
       <div class="navbar-inner">
         <div class="left">
@@ -17,9 +17,6 @@
             <i class="icon material-icons if-md">menu</i>
           </a>
         </div>
-        <div class="title-large">
-          <div class="title-large-text">Saga Boilerplate</div>
-        </div>
       </div>
     </div>
     <!-- Toolbar-->
@@ -32,70 +29,67 @@
     <!-- Scrollable page content-->
     <div class="page-content">
       <div class="block block-strong">
-        <p>Here is your blank Framework7 app. Let's see what we have here.</p>
+        <p>Bem vindo ao App Exemplo da Saga Virtual</p>
       </div>
-      <div class="block-title">Navigation</div>
-      <div class="list">
-        <ul>
-          <li>
-            <a href="/about/" class="item-content item-link">
-              <div class="item-inner">
-                <div class="item-title">About</div>
+      <div class="block-title">Login</div>
+      <form @submit="${(event)=>{login(event)}}">
+        <div class="list no-hairlines-md">
+          <ul>
+            <li class="item-content item-input">
+              <div class="item-media">
+                <i class="icon f7-icons color-blue">envelope</i>
               </div>
-            </a>
-          </li>
-          <li>
-            <a href="/form/" class="item-content item-link">
               <div class="item-inner">
-                <div class="item-title">Form</div>
+                <div class="item-title item-floating-label">E-mail</div>
+                <div class="item-input-wrap">
+                  <input type="email" name="email" placeholder="E-mail" required validate />
+                  <span class="input-clear-button"></span>
+                </div>
               </div>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="block-title">Modals</div>
-      <div class="block block-strong">
-        <div class="row">
-          <div class="col-50">
-            <a href="#" class="button button-raised button-fill popup-open" data-popup="#my-popup">Popup</a>
-          </div>
-          <div class="col-50">
-            <a href="#" class="button button-raised button-fill login-screen-open" data-login-screen="#my-login-screen">Login Screen</a>
-          </div>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-media">
+                <i class="icon f7-icons color-blue">lock</i>
+              </div>
+              <div class="item-inner">
+                <div class="item-title item-floating-label">Senha</div>
+                <div class="item-input-wrap">
+                  <input
+                    name="password"
+                    type="password"
+                    placeholder="Senha"
+                    required
+                    validate
+                  />
+                  <span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+            <li><button class="button list-button">Entrar</button></li>
+          </ul>
         </div>
-      </div>
-
-      <div class="block-title">Panels</div>
-      <div class="block block-strong">
-        <div class="row">
-          <div class="col-50">
-            <a href="#" class="button button-raised button-fill panel-open" data-panel="left">Left Panel</a>
-          </div>
-          <div class="col-50">
-            <a href="#" class="button button-raised button-fill panel-open" data-panel="right">Right Panel</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="list links-list">
-        <ul>
-          <li>
-            <a href="/dynamic-route/blog/45/post/125/?foo=bar#about">Dynamic (Component) Route</a>
-          </li>
-          <li>
-            <a href="/load-something-that-doesnt-exist/">Default Route (404)</a>
-          </li>
-          <li>
-            <a href="/request-and-load/user/123456/">Request Data & Load</a>
-          </li>
-        </ul>
-      </div>
+      </form>
     </div>
   </div>
 </template>
 <script>
-export default () => {
-  return $render;
-}
+  import AuthService from '@/js/services/AuthService';
+  export default (props,{$f7, $update}) => {
+    function login(event){
+      console.log(event);
+      event.preventDefault();
+      const form = event.target;
+
+      if(!$f7.input.validateInputs(form)) return $f7.dialog.alert('Preencha todos os campos!');
+      const data = $f7.form.convertToData(form);
+      AuthService.login(data).then((response)=>{
+        console.log(response);
+      }).catch((error)=>{
+        console.log(error);
+      });
+
+
+    }
+    return $render;
+  };
 </script>

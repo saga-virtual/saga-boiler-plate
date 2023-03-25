@@ -21,7 +21,7 @@ import App from '../app.f7';
 var device = getDevice();
 var app = new Framework7({
   name: 'Saga Boilerplate', // App name
-  theme: 'auto', // Automatic theme detection
+  theme: 'aurora', // Automatic theme detection
   el: '#app', // App root element
   component: App, // App main component
   id: 'io.framework7.myapp', // App bundle ID
