@@ -14,6 +14,9 @@ const BUILD_DIR = path.resolve(
   isCordova ? './cordova/www' : './www',
 );
 
+import * as dotenv from 'dotenv'
+dotenv.config();
+
 export default {
   plugins: [
     framework7({ emitCss: false }),
