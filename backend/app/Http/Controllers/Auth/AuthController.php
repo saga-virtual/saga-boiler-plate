@@ -33,8 +33,13 @@ class AuthController extends Controller
             return response()->json($success);
         }
         else{
-            return response()->json(['message'=>'Unauthorized'],401);
+            return response()->json(['message'=>'Usuário ou senha inválido.'],401);
         }
+    }
+
+    public function logout(Request $request){
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message'=>'Usuário deslogado com sucesso.']);
     }
 
     /**

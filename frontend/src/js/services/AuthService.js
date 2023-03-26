@@ -16,9 +16,19 @@ let AuthService = {
         }).catch(HandlerApiError);
     },
     async logout(){
+        AuthService.user = false;
         LocalDB.eraseData();
         ApiClient.get('/auth/logout');
+        window.location.reload();
     },
+}
+
+if(AuthService.user){
+    ApiClient.get('/user').then((response)=>{
+        AuthService.user = response.data.user;
+        LocalDB.data.user = AuthService.user ;
+        LocalDB.saveData();
+    });
 }
 
 export default AuthService;

@@ -29,67 +29,32 @@
     <!-- Scrollable page content-->
     <div class="page-content">
       <div class="block block-strong">
-        <p>Bem vindo ao App Exemplo da Saga Virtual</p>
+        <p>Bem vindo ${user.name}</p>
       </div>
-      <div class="block-title">Login</div>
-      <form @submit="${(event)=>{login(event)}}">
-        <div class="list no-hairlines-md">
-          <ul>
-            <li class="item-content item-input">
-              <div class="item-media">
-                <i class="icon f7-icons color-blue">envelope</i>
-              </div>
-              <div class="item-inner">
-                <div class="item-title item-floating-label">E-mail</div>
-                <div class="item-input-wrap">
-                  <input type="email" name="email" placeholder="E-mail" required validate />
-                  <span class="input-clear-button"></span>
-                </div>
-              </div>
-            </li>
-            <li class="item-content item-input">
-              <div class="item-media">
-                <i class="icon f7-icons color-blue">lock</i>
-              </div>
-              <div class="item-inner">
-                <div class="item-title item-floating-label">Senha</div>
-                <div class="item-input-wrap">
-                  <input
-                    name="password"
-                    type="password"
-                    placeholder="Senha"
-                    required
-                    validate
-                  />
-                  <span class="input-clear-button"></span>
-                </div>
-              </div>
-            </li>
-            <li><button class="button list-button">Entrar</button></li>
-          </ul>
-        </div>
-      </form>
+      <div class="list no-hairlines-md">
+        <ul>
+          <li>
+            <button class="button list-button" @click="${()=>{logout();}}">
+              Sair
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 <script>
-  import AuthService from '@/js/services/AuthService';
-  export default (props,{$f7, $update}) => {
-    function login(event){
-      console.log(event);
-      event.preventDefault();
-      const form = event.target;
+  import AuthService from "@/js/services/AuthService";
+  export default (props, { $f7, $update }) => {
+    let user = AuthService.user;
 
-      if(!$f7.input.validateInputs(form)) return $f7.dialog.alert('Preencha todos os campos!');
-      const data = $f7.form.convertToData(form);
-      AuthService.login(data).then((response)=>{
-        console.log(response);
-      }).catch((error)=>{
-        console.log(error);
+    function logout() {
+      $f7.dialog.confirm("Você tem certeza?", function () {
+        AuthService.logout();
+        $f7.views.main.router.navigate("/auth/login/", { reloadAll: true });
       });
-
-
     }
+
     return $render;
   };
 </script>
