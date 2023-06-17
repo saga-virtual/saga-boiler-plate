@@ -45,7 +45,7 @@ services:
       - ${APP_NETWORK}
     command: redis-server --appendonly yes --replica-read-only no
   php-queue:
-    restart: always
+    restart: unless-stopped
     image: ${APP_NAME}-laravel
     working_dir: /var/www/
     command: php artisan queue:work
