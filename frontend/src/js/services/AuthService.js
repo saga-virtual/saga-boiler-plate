@@ -28,6 +28,12 @@ if(AuthService.user){
         AuthService.user = response.data.user;
         LocalDB.data.user = AuthService.user ;
         LocalDB.saveData();
+        window.f7.emit('userUpdate');
+    }).catch((error)=>{
+        AuthService.user = false;
+        LocalDB.data.user = false;
+        LocalDB.saveData();
+        window.f7.emit('userUpdate');
     });
 }
 
